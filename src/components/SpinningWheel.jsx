@@ -1,11 +1,32 @@
 import { useState, useRef, useMemo } from 'react'
 import './SpinningWheel.css'
 
-const COLORS = [
-  '#FF6B35', '#4ECDC4', '#FFE66D', '#95E1D3', '#F38181',
-  '#AA96DA', '#FCBAD3', '#A8D8EA', '#FF9A8B', '#FAD0C4',
-  '#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe',
-  '#43e97b', '#fa709a', '#fee140', '#30cfd0', '#E84A5F'
+const BRAND_COLORS = {
+  "McDonald's":     '#FFC72C',
+  "Chick-fil-A":    '#E51636',
+  "Taco Bell":      '#702082',
+  "Wendy's":        '#E2203A',
+  "Subway":         '#008C15',
+  "Burger King":    '#FF8732',
+  "Chipotle":       '#441500',
+  "Raising Cane's": '#ED1C24',
+  "Panda Express":  '#D62300',
+  "Pizza Hut":      '#EE3A23',
+  "Domino's":       '#006491',
+  "KFC":            '#F40027',
+  "Popeyes":        '#F58220',
+  "Five Guys":      '#ED1C24',
+  "In-N-Out":       '#FFED00',
+  "Whataburger":    '#FF6600',
+  "Sonic":          '#003478',
+  "Arby's":         '#D2172A',
+  "Dunkin'":        '#FF671F',
+  "Starbucks":      '#006241',
+}
+
+const FALLBACK_COLORS = [
+  '#FF6B35', '#4ECDC4', '#667eea', '#F38181',
+  '#AA96DA', '#43e97b', '#f5576c', '#30cfd0'
 ]
 
 export default function SpinningWheel({ restaurants, onSpinComplete }) {
@@ -18,10 +39,11 @@ export default function SpinningWheel({ restaurants, onSpinComplete }) {
   const conicGradient = useMemo(() => {
     if (restaurants.length === 0) return 'conic-gradient(#999 0deg 360deg)'
     const stops = restaurants
-      .map((_, i) => {
+      .map((name, i) => {
         const start = (i * segmentAngle)
         const end = ((i + 1) * segmentAngle)
-        return `${COLORS[i % COLORS.length]} ${start}deg ${end}deg`
+        const color = BRAND_COLORS[name] ?? FALLBACK_COLORS[i % FALLBACK_COLORS.length]
+        return `${color} ${start}deg ${end}deg`
       })
       .join(', ')
     return `conic-gradient(${stops})`
