@@ -1,0 +1,117 @@
+.customize-page {
+  display: flex;
+  justify-content: center;
+}
+
+.customize-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 480px;
+  animation: fadeIn 0.4s ease;
+}
+
+.customize-card h2 {
+  font-size: 1.25rem;
+  color: #2C3E50;
+  margin-bottom: 1rem;
+}
+
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.add-form input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.add-form input:focus {
+  outline: none;
+  border-color: #FF6B35;
+}
+
+.add-form button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #4ECDC4, #44A08D);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.add-form button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.add-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.restaurant-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.restaurant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #f8f8f8;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.restaurant-item:hover {
+  background: #f0f0f0;
+}
+
+.restaurant-item span {
+  font-weight: 600;
+  color: #2C3E50;
+}
+
+.remove-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #F38181;
+  color: white;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.remove-btn:hover {
+  background: #E84A5F;
+  transform: scale(1.1);
+}
+
+.empty-msg {
+  color: #888;
+  font-style: italic;
+  padding: 1rem 0;
+}

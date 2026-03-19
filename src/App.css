@@ -1,0 +1,56 @@
+.app {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.title {
+  font-family: 'Bangers', cursive;
+  font-size: 2.5rem;
+  color: #FF6B35;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-bottom: 0.75rem;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  text-decoration: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 600;
+  color: #2C3E50;
+  transition: all 0.3s ease;
+  background: #f0f0f0;
+}
+
+.nav-link:hover {
+  background: #FF6B35;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, #FF6B35, #E55A2B);
+  color: white;
+}
+
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
