@@ -29,34 +29,33 @@ const FALLBACK_COLORS = [
   '#AA96DA', '#43e97b', '#f5576c', '#30cfd0'
 ]
 
+function getColor(name, i) {
+  return BRAND_COLORS[name] ?? FALLBACK_COLORS[i % FALLBACK_COLORS.length]
+}
+
 export default function SpinningWheel({ restaurants, onSpinComplete }) {
   const [rotation, setRotation] = useState(0)
   const [isSpinning, setIsSpinning] = useState(false)
   const wheelRef = useRef(null)
 
-  const segmentAngle = 360 / Math.max(restaurants.length, 1)
+  const count = restaurants.length
+  const segmentAngle = 360 / Math.max(count, 1)
 
   const conicGradient = useMemo(() => {
-    if (restaurants.length === 0) return 'conic-gradient(#999 0deg 360deg)'
-    const stops = restaurants
-      .map((name, i) => {
-        const start = (i * segmentAngle)
-        const end = ((i + 1) * segmentAngle)
-        const color = BRAND_COLORS[name] ?? FALLBACK_COLORS[i % FALLBACK_COLORS.length]
-        return `${color} ${start}deg ${end}deg`
-      })
-      .join(', ')
-    return `conic-gradient(${stops})`
-  }, [restaurants, segmentAngle])
+    if (count === 0) return 'conic-gradient(#999 0deg 360deg)'
+    return `conic-gradient(${restaurants.map((name, i) => {
+      const color = getColor(name, i)
+      return `${color} ${i * segmentAngle}deg ${(i + 1) * segmentAngle}deg`
+    }).join(', ')})`
+  }, [restaurants, segmentAngle, count])
 
   const handleSpin = () => {
-    if (isSpinning || restaurants.length === 0) return
+    if (isSpinning || count === 0) return
 
     setIsSpinning(true)
-    const randomIndex = Math.floor(Math.random() * restaurants.length)
-    const targetAngle = 360 - (randomIndex * segmentAngle + segmentAngle / 2)
-    const fullSpins = 5 + Math.random() * 3
-    const totalRotation = rotation + 360 * fullSpins + targetAngle
+    const fullSpins = 5 + Math.floor(Math.random() * 3)
+    const extraAngle = Math.random() * 360
+    const totalRotation = rotation + 360 * fullSpins + extraAngle
 
     setRotation(totalRotation)
 
@@ -68,40 +67,74 @@ export default function SpinningWheel({ restaurants, onSpinComplete }) {
 
     setTimeout(() => {
       setIsSpinning(false)
-      onSpinComplete?.(restaurants[randomIndex])
+      const normalized = ((totalRotation % 360) + 360) % 360
+      const pointerAngle = (360 - normalized) % 360
+      const winnerIndex = Math.floor(pointerAngle / segmentAngle) % count
+      onSpinComplete?.(restaurants[winnerIndex])
     }, duration)
   }
 
+  const fontSize = count <= 6 ? 0.85 : count <= 10 ? 0.75 : count <= 15 ? 0.65 : 0.55
+
   return (
     <div className="wheel-container">
-      <div className="wheel-pointer">▼</div>
-      <div
-        ref={wheelRef}
-        className="wheel"
-        style={{
-          transform: `rotate(${rotation}deg)`,
-          background: conicGradient
-        }}
-      >
-        <div className="wheel-labels">
-          {restaurants.map((name, i) => (
+      <div className="wheel-wrapper">
+        <svg className="wheel-pointer" viewBox="0 0 40 32" width="40" height="32">
+          <defs>
+            <filter id="pointer-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.35" />
+            </filter>
+          </defs>
+          <polygon
+            points="20,32 3,0 37,0"
+            fill="#2C3E50"
+            stroke="#FFE66D"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+            filter="url(#pointer-shadow)"
+          />
+        </svg>
+
+        <div
+          ref={wheelRef}
+          className="wheel"
+          style={{
+            transform: `rotate(${rotation}deg)`,
+            background: conicGradient
+          }}
+        >
+          {restaurants.map((_, i) => (
             <div
-              key={`${name}-${i}`}
-              className="wheel-label"
-              style={{
-                '--segment-angle': `${segmentAngle}deg`,
-                '--segment-index': i
-              }}
-            >
-              <span>{name}</span>
-            </div>
+              key={`div-${i}`}
+              className="wheel-divider"
+              style={{ transform: `rotate(${i * segmentAngle - 90}deg)` }}
+            />
           ))}
+
+          {restaurants.map((name, i) => {
+            const midAngle = i * segmentAngle + segmentAngle / 2 - 90
+            return (
+              <div
+                key={`label-${name}-${i}`}
+                className="wheel-label"
+                style={{
+                  transform: `rotate(${midAngle}deg)`,
+                  fontSize: `${fontSize}rem`
+                }}
+              >
+                <span>{name}</span>
+              </div>
+            )
+          })}
+
+          <div className="wheel-hub" />
         </div>
       </div>
+
       <button
         className="spin-button"
         onClick={handleSpin}
-        disabled={isSpinning || restaurants.length === 0}
+        disabled={isSpinning || count === 0}
       >
         {isSpinning ? 'SPINNING...' : 'SPIN'}
       </button>
